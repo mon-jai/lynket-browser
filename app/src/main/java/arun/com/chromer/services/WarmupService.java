@@ -3,8 +3,9 @@ package arun.com.chromer.services;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsSession;
+
+import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabsSession;
 
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import timber.log.Timber;

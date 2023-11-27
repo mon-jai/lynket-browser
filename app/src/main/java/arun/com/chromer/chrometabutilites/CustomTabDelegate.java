@@ -9,8 +9,9 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.customtabs.CustomTabsSession;
+
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.browser.customtabs.CustomTabsSession;
 
 import arun.com.chromer.R;
 import arun.com.chromer.services.ClipboardService;
@@ -93,7 +94,7 @@ public class CustomTabDelegate {
 
                 PendingIntent openBrowser = PendingIntent
                         .getBroadcast(ctx, 0, activityIntent,
-                                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+                                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
                 builder.setActionButton(icon, "Secondary browser", openBrowser);
             } catch (PackageManager.NameNotFoundException e) {
                 Timber.d("Was not able to set secondary browser");
@@ -121,7 +122,7 @@ public class CustomTabDelegate {
             Intent addShortcutIntent = new Intent(c, AddHomeShortcutReceiver.class);
             PendingIntent addShortcut = PendingIntent
                     .getBroadcast(c, 0, addShortcutIntent,
-                            PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
 
             builder.addMenuItem(c.getString(R.string.add_to_homescreen), addShortcut);
         }
@@ -131,7 +132,7 @@ public class CustomTabDelegate {
         if (url != null) {
             Intent clipboardIntent = new Intent(c, ClipboardService.class);
             PendingIntent serviceIntent = PendingIntent.getService(c, 0, clipboardIntent,
-                    PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
             builder.addMenuItem(c.getString(R.string.copy_link), serviceIntent);
         }
     }
@@ -141,7 +142,7 @@ public class CustomTabDelegate {
             Intent shareIntent = new Intent(c, ShareBroadcastReceiver.class);
             PendingIntent pendingShareIntent = PendingIntent
                     .getBroadcast(c, 0, shareIntent,
-                            PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
             builder.addMenuItem(c.getString(R.string.share), pendingShareIntent);
         }
     }

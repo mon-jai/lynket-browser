@@ -111,4 +111,11 @@
             android:exported="false"></receiver>
     </application>
 
+    <!-- https://stackoverflow.com/a/65852079/ -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+    </queries>
 </manifest>

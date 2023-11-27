@@ -3,7 +3,8 @@ package arun.com.chromer.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 
 import arun.com.chromer.R;
 

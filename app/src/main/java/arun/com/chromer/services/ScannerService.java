@@ -8,10 +8,11 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.customtabs.CustomTabsService;
-import android.support.customtabs.CustomTabsSession;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+
+import androidx.browser.customtabs.CustomTabsService;
+import androidx.browser.customtabs.CustomTabsSession;
 
 import java.util.ArrayList;
 import java.util.Collections;

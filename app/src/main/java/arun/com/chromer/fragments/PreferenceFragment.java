@@ -1,7 +1,8 @@
 package arun.com.chromer.fragments;
 
 import android.os.Bundle;
-import android.support.v7.preference.PreferenceFragmentCompat;
+
+import androidx.preference.PreferenceFragmentCompat;
 
 import arun.com.chromer.R;
 
