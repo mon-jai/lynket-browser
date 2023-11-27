@@ -7,9 +7,9 @@ android {
 
     defaultConfig {
         applicationId "arun.com.chromer"
-        minSdkVersion 32
-        compileSdk 32
-        targetSdkVersion 32
+        minSdkVersion 34
+        compileSdk 34
+        targetSdkVersion 34
         versionCode 9
         versionName "1.4.1"
 

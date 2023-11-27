@@ -3,7 +3,6 @@ package arun.com.chromer.chrometabutilites;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -87,18 +86,13 @@ public class CustomTabDelegate {
 
     private static void addActionButtonSecondary(Context ctx, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
-            try {
-                Bitmap icon = drawableToBitmap(ctx.getPackageManager().getApplicationIcon(PrefUtil.getSecondaryPref(ctx)));
+            Intent activityIntent = new Intent(ctx, SecondaryBrowserReceiver.class);
 
-                Intent activityIntent = new Intent(ctx, SecondaryBrowserReceiver.class);
-
-                PendingIntent openBrowser = PendingIntent
-                        .getBroadcast(ctx, 0, activityIntent,
-                                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
-                builder.setActionButton(icon, "Secondary browser", openBrowser);
-            } catch (PackageManager.NameNotFoundException e) {
-                Timber.d("Was not able to set secondary browser");
-            }
+            PendingIntent openBrowser = PendingIntent
+                    .getBroadcast(ctx, 0, activityIntent,
+                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setActionButton(
+                    drawableToBitmap(ctx.getResources().getDrawable(R.drawable.ic_open_in_browser, ctx.getTheme())), "Secondary browser", openBrowser);
         }
     }
 
