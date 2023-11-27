@@ -1,5 +1,7 @@
 package arun.com.chromer.chrometabutilites;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +11,6 @@ import android.widget.Toast;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.TabActivity;
 import timber.log.Timber;
-
-import static android.widget.Toast.LENGTH_SHORT;
 
 public class AddHomeShortcutReceiver extends BroadcastReceiver {
     private static final String TAG = AddHomeShortcutReceiver.class.getSimpleName();

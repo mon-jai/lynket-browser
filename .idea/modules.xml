@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Chromer.iml" filepath="$PROJECT_DIR$/Chromer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lynket-browser.iml" filepath="$PROJECT_DIR$/.idea/modules/lynket-browser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/lynket-browser.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/lynket-browser.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/lynket-browser.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/lynket-browser.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/lynket-browser.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/lynket-browser.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/lynket-browser.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/lynket-browser.app.unitTest.iml" />
     </modules>
   </component>
 </project>

@@ -117,8 +117,8 @@ class MyTagHandler implements Html.TagHandler {
     private static Object getLast(Spanned text, Class<?> kind) {
         /*
          * This knows that the last returned object from getSpans()
-		 * will be the most recently added.
-		 */
+         * will be the most recently added.
+         */
         Object[] objs = text.getSpans(0, text.length(), kind);
         if (objs.length == 0) {
             return null;

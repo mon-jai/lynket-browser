@@ -358,11 +358,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         findViewById(R.id.color_picker_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ColorChooserDialog.Builder(MainActivity.this, R.string.md_choose_label)
-                        .titleSub(R.string.md_presets_label)
-                        .doneButton(R.string.md_done_label)
-                        .cancelButton(R.string.md_cancel_label)
-                        .backButton(R.string.md_back_label)
+                new ColorChooserDialog.Builder(MainActivity.this, com.afollestad.materialdialogs.commons.R.string.md_choose_label)
+                        .titleSub(com.afollestad.materialdialogs.commons.R.string.md_presets_label)
+                        .doneButton(com.afollestad.materialdialogs.commons.R.string.md_done_label)
+                        .cancelButton(com.afollestad.materialdialogs.commons.R.string.md_cancel_label)
+                        .backButton(com.afollestad.materialdialogs.commons.R.string.md_back_label)
                         .allowUserColorInputAlpha(false)
                         .preselect(chosenColor)
                         .dynamicButtonColor(false)

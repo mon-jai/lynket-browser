@@ -1,0 +1,26 @@
+name: Generate APK
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set Up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: "gradle"
+
+      - name: Build apk release
+        run: gradle assemble
+
+      - name: Upload APK Release
+        uses: actions/upload-artifact@v3
+        with:
+          path: ./app/build/outputs/apk/release/

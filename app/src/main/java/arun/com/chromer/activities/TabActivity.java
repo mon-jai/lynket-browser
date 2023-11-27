@@ -32,7 +32,7 @@ public class TabActivity extends AppCompatActivity {
                                     activity.getString(R.string.open_with)));
                         } catch (ActivityNotFoundException e) {
                             Toast.makeText(activity,
-                                    activity.getString(R.string.unxp_err), Toast.LENGTH_SHORT)
+                                            activity.getString(R.string.unxp_err), Toast.LENGTH_SHORT)
                                     .show();
                         }
                     }

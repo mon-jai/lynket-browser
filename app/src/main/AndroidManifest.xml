@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="arun.com.chromer">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
@@ -35,6 +34,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -45,6 +45,7 @@
         </activity>
         <activity
             android:name=".activities.TabActivity"
+            android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/Transparent">
@@ -65,6 +66,7 @@
         <activity
             android:name=".activities.ShareInterceptActivity"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:label="Open in Chromer">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -90,7 +92,8 @@
             android:theme="@style/DonatePopUp" />
         <activity
             android:name=".activities.DummyActivity"
-            android:enabled="false">
+            android:enabled="false"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
