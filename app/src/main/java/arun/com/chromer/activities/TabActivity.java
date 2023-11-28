@@ -2,12 +2,12 @@ package arun.com.chromer.activities;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 
 import arun.com.chromer.R;
@@ -16,7 +16,7 @@ import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.util.PrefUtil;
 import arun.com.chromer.util.Util;
 
-public class TabActivity extends AppCompatActivity {
+public class TabActivity extends Activity {
 
     public final static MyCustomActivityHelper.CustomTabsFallback mCustomTabsFallback =
             new MyCustomActivityHelper.CustomTabsFallback() {
@@ -43,6 +43,18 @@ public class TabActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Context context = getApplicationContext();
+
+        if (PrefUtil.isFirstRun(context)) {
+            Intent intent = new Intent();
+            intent.setClass(context, arun.com.chromer.MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            finish();
+            return;
+        }
+
         if (getIntent() == null || getIntent().getData() == null) {
             Toast.makeText(this, getString(R.string.unsupported_link), Toast.LENGTH_SHORT).show();
             finish();

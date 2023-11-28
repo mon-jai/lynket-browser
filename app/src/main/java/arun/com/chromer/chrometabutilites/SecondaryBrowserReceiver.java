@@ -31,9 +31,9 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
             List<ResolveInfo> resolvedActivityList = context.getPackageManager()
                     .queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
             for (ResolveInfo info : resolvedActivityList) {
-                if (info.activityInfo.packageName.equalsIgnoreCase(secondaryPackage))
-                    activityIntent.setComponent(new ComponentName(info.activityInfo.packageName,
-                            info.activityInfo.name));
+                if (info.activityInfo.packageName.equalsIgnoreCase(secondaryPackage)) {
+                    activityIntent.setComponent(new ComponentName(secondaryPackage, info.activityInfo.name));
+                }
             }
             context.startActivity(activityIntent);
         } else {
