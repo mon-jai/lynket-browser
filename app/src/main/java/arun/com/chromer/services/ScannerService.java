@@ -116,11 +116,11 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
     }
 
     private class TextProcessorTask extends AsyncTask<Void, String, Void> {
-        private AccessibilityNodeInfo info;
-        private Stack<AccessibilityNodeInfo> tree;
-        private int maxUrl = 4;
+        private final AccessibilityNodeInfo info;
+        private final Stack<AccessibilityNodeInfo> tree;
+        private final int maxUrl = 4;
+        private final List<String> urls = new ArrayList<>();
         private int extractedCount = 0;
-        private List<String> urls = new ArrayList<>();
 
         TextProcessorTask(AccessibilityNodeInfo nodeInfo) {
             info = nodeInfo;

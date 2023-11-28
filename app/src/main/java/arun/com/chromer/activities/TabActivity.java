@@ -22,7 +22,6 @@ public class TabActivity extends AppCompatActivity {
             new MyCustomActivityHelper.CustomTabsFallback() {
                 @Override
                 public void openUri(Activity activity, Uri uri) {
-
                     if (activity != null) {
                         Toast.makeText(activity,
                                 activity.getString(R.string.fallback_msg),
@@ -41,25 +40,20 @@ public class TabActivity extends AppCompatActivity {
             };
     private static final String TAG = TabActivity.class.getSimpleName();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getIntent() == null || getIntent().getData() == null) {
             Toast.makeText(this, getString(R.string.unsupported_link), Toast.LENGTH_SHORT).show();
             finish();
             // TODO handle no intent later
             return;
         }
-
         final String url = getIntent().getData().toString();
         CustomTabsIntent mCustomTabsIntent = CustomTabDelegate.getCustomizedTabIntent(
                 getApplicationContext(), url);
-
         MyCustomActivityHelper.openCustomTab(this, mCustomTabsIntent,
-                Uri.parse(getIntent().getData().toString()),
-                mCustomTabsFallback);
+                Uri.parse(getIntent().getData().toString()));
         finish();
     }
 
@@ -68,7 +62,6 @@ public class TabActivity extends AppCompatActivity {
             return false;
         } else if (!PrefUtil.isPreFetchPrefered(this))
             return true;
-
         return true;
     }
 }

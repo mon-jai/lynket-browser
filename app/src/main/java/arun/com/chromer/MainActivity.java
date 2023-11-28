@@ -1,6 +1,5 @@
 package arun.com.chromer;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,7 +12,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -22,38 +20,22 @@ import androidx.browser.customtabs.CustomTabsIntent;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import arun.com.chromer.activities.AboutAppActivity;
-import arun.com.chromer.activities.DonateActivity;
-import arun.com.chromer.activities.TabActivity;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
-import arun.com.chromer.fragments.PreferenceFragment;
-import arun.com.chromer.intro.AppIntroMy;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
-import arun.com.chromer.util.ChangelogUtil;
 import arun.com.chromer.util.PrefUtil;
-import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
+public class MainActivity extends AppCompatActivity {
 
     private static final String GOOGLE_URL = "http://www.google.com/";
     private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
@@ -91,26 +73,14 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         SharedPreferences mPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
 
-        if (PrefUtil.isFirstRun(this)) {
-            startActivity(new Intent(this, AppIntroMy.class));
-        }
-
-        if (ChangelogUtil.shouldShowChangelog(this)) {
-            ChangelogUtil.showChangelogDialog(this);
-        }
-
-        setupDrawer(toolbar);
-
         setupFAB();
 
         setupCustomTab();
-
-        setupColorPicker();
 
         findViewById(R.id.set_default).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,11 +93,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         setUpSecondaryBrowser();
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.preference_fragment, PreferenceFragment.newInstance())
-                .commit();
-
         checkAndEducateUser();
 
         populateUIBasedOnPreferences();
@@ -136,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setUpSecondaryBrowser() {
-        mSecondaryBrowser = (ImageView) findViewById(R.id.secondary_browser_view);
+        mSecondaryBrowser = findViewById(R.id.secondary_browser_view);
 
         try {
             mSecondaryBrowser.setImageDrawable(
@@ -158,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     if (!info.activityInfo.packageName.equalsIgnoreCase(getPackageName()))
                         packages.add(info.activityInfo.packageName);
                 }
-                String pack[] = Util.getAppNameFromPackages(MainActivity.this, packages);
+                String[] pack = Util.getAppNameFromPackages(MainActivity.this, packages);
                 int choice = -1;
 
                 String secondaryPref = PrefUtil.getSecondaryPref(MainActivity.this);
@@ -202,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private void populateUIBasedOnPreferences() {
         linkAccessiblityAndPrefetch();
 
-        mWarmUpSwitch = (SwitchCompat) findViewById(R.id.warm_up_switch);
+        mWarmUpSwitch = findViewById(R.id.warm_up_switch);
         mWarmUpSwitch.setChecked(PrefUtil.isWarmUpPreferred(this));
         mWarmUpSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -212,13 +177,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             }
         });
 
-        mPrefetchSwitch = (SwitchCompat) findViewById(R.id.pre_fetch_switch);
+        mPrefetchSwitch = findViewById(R.id.pre_fetch_switch);
         mPrefetchSwitch.setChecked(PrefUtil.isPreFetchPrefered(this));
         linkWarmAndPrefetch(PrefUtil.isPreFetchPrefered(this));
         mPrefetchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                boolean warmup = isChecked ? false : PrefUtil.isWarmUpPreferred(MainActivity.this);
+                boolean warmup = !isChecked && PrefUtil.isWarmUpPreferred(MainActivity.this);
 
                 if (!Util.isAccessibilityServiceEnabled(MainActivity.this)) {
                     mPrefetchSwitch.setChecked(false);
@@ -243,29 +208,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             }
         });
 
-        mWifiSwitch = (SwitchCompat) findViewById(R.id.only_wifi_switch);
+        mWifiSwitch = findViewById(R.id.only_wifi_switch);
         mWifiSwitch.setChecked(PrefUtil.isWifiPreferred(this));
         mWifiSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 PrefUtil.setWifiPrefetch(MainActivity.this, isChecked);
                 takeCareOfServices();
-            }
-        });
-
-        mDynamicSwitch = (SwitchCompat) findViewById(R.id.dynamic_swich);
-        mDynamicSwitch.setChecked(PrefUtil.isDynamicToolbar(this));
-        mDynamicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PrefUtil.setDynamicToolbar(MainActivity.this, isChecked);
-                if (isChecked) {
-                    new MaterialDialog.Builder(MainActivity.this)
-                            .title(R.string.web_dep_tlbr_clr)
-                            .content(R.string.dynamic_toolbar_help)
-                            .positiveText(android.R.string.ok)
-                            .show();
-                }
             }
         });
     }
@@ -284,11 +233,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void linkWarmAndPrefetch(boolean isChecked) {
-        if (isChecked) {
-            mWarmUpSwitch.setEnabled(false);
-        } else {
-            mWarmUpSwitch.setEnabled(true);
-        }
+        mWarmUpSwitch.setEnabled(!isChecked);
     }
 
     private void takeCareOfServices() {
@@ -345,33 +290,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setupFAB() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchCustomTab(GOOGLE_URL);
             }
         });
-    }
-
-    private void setupColorPicker() {
-        final int chosenColor = PrefUtil.getToolbarColor(this);
-        findViewById(R.id.color_picker_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new ColorChooserDialog.Builder(MainActivity.this, com.afollestad.materialdialogs.commons.R.string.md_choose_label)
-                        .titleSub(com.afollestad.materialdialogs.commons.R.string.md_presets_label)
-                        .doneButton(com.afollestad.materialdialogs.commons.R.string.md_done_label)
-                        .cancelButton(com.afollestad.materialdialogs.commons.R.string.md_cancel_label)
-                        .backButton(com.afollestad.materialdialogs.commons.R.string.md_back_label)
-                        .allowUserColorInputAlpha(false)
-                        .preselect(chosenColor)
-                        .dynamicButtonColor(false)
-                        .show();
-            }
-        });
-        mColorView = findViewById(R.id.color_preview);
-        mColorView.setBackgroundColor(chosenColor);
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -401,99 +326,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         }
     }
 
-    private void setupDrawer(Toolbar toolbar) {
-        Drawer drawer = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(toolbar)
-                .withAccountHeader(new AccountHeaderBuilder()
-                        .withActivity(this)
-                        .withHeaderBackground(R.drawable.chromer)
-                        .withHeaderBackgroundScaleType(ImageView.ScaleType.CENTER_CROP)
-                        .withDividerBelowHeader(true)
-                        .build())
-                .addDrawerItems(
-                        new PrimaryDrawerItem().withName(getString(R.string.intro)).withIdentifier(4)
-                                .withIcon(GoogleMaterial.Icon.gmd_assignment)
-                                .withSelectable(false),
-                        new PrimaryDrawerItem().withName(getString(R.string.feedback)).withIdentifier(2)
-                                .withIcon(GoogleMaterial.Icon.gmd_feedback)
-                                .withSelectable(false),
-                        new PrimaryDrawerItem().withName(getString(R.string.rate_play_store)).withIdentifier(3)
-                                .withIcon(GoogleMaterial.Icon.gmd_rate_review)
-                                .withSelectable(false),
-                        new DividerDrawerItem(),
-                        new SecondaryDrawerItem().withName(getString(R.string.more_custom_tbs))
-                                .withIcon(GoogleMaterial.Icon.gmd_open_in_new)
-                                .withIdentifier(5)
-                                .withSelectable(false),
-                        new SecondaryDrawerItem().withName(getString(R.string.share))
-                                .withIcon(GoogleMaterial.Icon.gmd_share)
-                                .withDescription(getString(R.string.help_chromer_grow))
-                                .withIdentifier(7)
-                                .withSelectable(false),
-                        new SecondaryDrawerItem().withName(getString(R.string.support_development))
-                                .withDescription(R.string.consider_donation)
-                                .withIcon(GoogleMaterial.Icon.gmd_favorite)
-                                .withIdentifier(6)
-                                .withSelectable(false),
-                        new SecondaryDrawerItem().withName(getString(R.string.about))
-                                .withIcon(GoogleMaterial.Icon.gmd_info_outline)
-                                .withIdentifier(8)
-                                .withSelectable(false)
-                ).withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (drawerItem == null)
-                            return false;
-                        int i = drawerItem.getIdentifier();
-                        switch (i) {
-                            case 2:
-                                Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
-                                        Uri.fromParts("mailto", StringConstants.MAILID, null));
-                                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-                                startActivity(Intent.createChooser(emailIntent,
-                                        getString(R.string.send_email)));
-                                break;
-                            case 3:
-                                Util.openPlayStore(MainActivity.this, getPackageName());
-                                break;
-                            case 4:
-                                startActivity(new Intent(MainActivity.this, AppIntroMy.class));
-                                break;
-                            case 5:
-                                launchCustomTab(CUSTOM_TAB_URL);
-                                break;
-                            case 6:
-                                startActivity(new Intent(MainActivity.this, DonateActivity.class));
-                                break;
-                            case 7:
-                                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                                shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
-                                shareIntent.setType("text/plain");
-                                startActivity(Intent.createChooser(shareIntent,
-                                        getString(R.string.share_via)));
-                                break;
-                            case 8:
-                                Intent aboutActivityIntent = new Intent(MainActivity.this,
-                                        AboutAppActivity.class);
-                                startActivity(aboutActivityIntent,
-                                        ActivityOptions.makeCustomAnimation(MainActivity.this,
-                                                R.anim.slide_in_right,
-                                                R.anim.slide_out_left).toBundle()
-                                );
-                                break;
-                        }
-                        return false;
-                    }
-                })
-                .build();
-        drawer.setSelection(-1);
-    }
-
     private void launchCustomTab(String url) {
         CustomTabsIntent mCustomTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url);
-        MyCustomActivityHelper.openCustomTab(this, mCustomTabsIntent, Uri.parse(url),
-                TabActivity.mCustomTabsFallback);
+        MyCustomActivityHelper.openCustomTab(this, mCustomTabsIntent, Uri.parse(url));
     }
 
     private void setupCustomTab() {
@@ -527,12 +362,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 });
     }
 
-    @Override
-    public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int selectedColor) {
-        mColorView.setBackgroundColor(selectedColor);
-        PrefUtil.setToolbarColor(this, selectedColor);
-    }
-
     private void checkAndEducateUser() {
         List packages = MyCustomTabHelper.getCustomTabSupportingPackages(this);
         if (packages.size() == 0) {
@@ -540,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     .title(getString(R.string.custom_tab_provider_not_found))
                     .content(getString(R.string.custom_tab_provider_not_found_expln))
                     .positiveText(getString(R.string.install))
-                    .negativeText(getString(android.R.string.no))
+                    .negativeText(getString(android.R.string.cancel))
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

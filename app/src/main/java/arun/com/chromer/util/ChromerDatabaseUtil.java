@@ -14,7 +14,7 @@ public class ChromerDatabaseUtil {
     public static final String CONTACTS_COLUMN_URL = "url";
     public static final String COLUMN_COLOR = "color";
 
-    private DBHelper dbHelper;
+    private final DBHelper dbHelper;
 
     public ChromerDatabaseUtil(Context context) {
         dbHelper = new DBHelper(context);

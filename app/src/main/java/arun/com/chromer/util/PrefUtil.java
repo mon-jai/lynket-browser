@@ -4,19 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import androidx.core.content.ContextCompat;
-
-import arun.com.chromer.R;
-
 /**
  * Created by Arun on 05/01/2016.
  */
 public class PrefUtil {
     public static final String PREFERRED_PACKAGE = "preferred_package";
-    public static final String TOOLBAR_COLOR = "toolbar_color";
-    public static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
-    public static final String SHOW_TITLE_PREF = "title_pref";
-    public static final String ENABLE_ANIMATION = "animations_pref";
     public static final String ANIMATION_TYPE = "animation_preference";
     public static final String FIRST_RUN = "firstrun";
     public static final String WARM_UP = "warm_up_preference";
@@ -35,44 +27,6 @@ public class PrefUtil {
             return true;
         }
         return false;
-    }
-
-    public static boolean isColoredToolbar(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(TOOLBAR_COLOR_PREF, true);
-    }
-
-    public static int getToolbarColor(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getInt(TOOLBAR_COLOR,
-                        ContextCompat.getColor(context, R.color.colorPrimary));
-    }
-
-    public static void setToolbarColor(Context context, int selectedColor) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putInt("toolbar_color", selectedColor).apply();
-    }
-
-    public static boolean isAnimationEnabled(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(ENABLE_ANIMATION, true);
-    }
-
-    public static int getAnimationPref(Context context) {
-        return Integer.parseInt(PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getString(ANIMATION_TYPE, "1"));
-    }
-
-    public static boolean isShowTitle(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(SHOW_TITLE_PREF, true);
     }
 
     public static String getPreferredTabApp(Context context) {
@@ -102,10 +56,7 @@ public class PrefUtil {
     }
 
     public static boolean isWarmUpPreferred(Context context) {
-        if (preferences(context).getBoolean(WARM_UP, false)) {
-            return true;
-        }
-        return false;
+        return preferences(context).getBoolean(WARM_UP, false);
     }
 
     public static void setWarmUpPreference(Context context, boolean preference) {
@@ -113,10 +64,7 @@ public class PrefUtil {
     }
 
     public static boolean isPreFetchPrefered(Context context) {
-        if (preferences(context).getBoolean(PRE_FETCH, false)) {
-            return true;
-        }
-        return false;
+        return preferences(context).getBoolean(PRE_FETCH, false);
     }
 
     public static void setPrefetchPreference(Context context, boolean preference) {
@@ -124,10 +72,7 @@ public class PrefUtil {
     }
 
     public static boolean isWifiPreferred(Context context) {
-        if (preferences(context).getBoolean(WIFI_PREFETCH, false)) {
-            return true;
-        }
-        return false;
+        return preferences(context).getBoolean(WIFI_PREFETCH, false);
     }
 
     public static void setWifiPrefetch(Context context, boolean preference) {
@@ -135,10 +80,7 @@ public class PrefUtil {
     }
 
     public static boolean isDynamicToolbar(Context context) {
-        if (preferences(context).getBoolean(DYNAMIC_COLOR, false)) {
-            return true;
-        }
-        return false;
+        return preferences(context).getBoolean(DYNAMIC_COLOR, false);
     }
 
     public static void setDynamicToolbar(Context context, boolean preference) {

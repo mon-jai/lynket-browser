@@ -7,17 +7,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsSession;
 
 import arun.com.chromer.R;
-import arun.com.chromer.services.ClipboardService;
-import arun.com.chromer.services.ColorExtractor;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
-import arun.com.chromer.util.ChromerDatabaseUtil;
 import arun.com.chromer.util.PrefUtil;
 import timber.log.Timber;
 
@@ -28,58 +24,13 @@ public class CustomTabDelegate {
     private static final String TAG = CustomTabDelegate.class.getSimpleName();
 
     public static CustomTabsIntent getCustomizedTabIntent(Context ctx, String url) {
-
         CustomTabsIntent.Builder builder;
-
         CustomTabsSession session = getAvailableSessions(ctx);
 
-        if (session != null) {
-            builder = new CustomTabsIntent.Builder(session);
-        } else
-            builder = new CustomTabsIntent.Builder();
-
-
-        if (PrefUtil.isColoredToolbar(ctx)) {
-            int chosenColor = -1;
-            if (PrefUtil.isDynamicToolbar(ctx)) {
-                String host = Uri.parse(url).getHost();
-                chosenColor = new ChromerDatabaseUtil(ctx).getColor(host);
-                if (chosenColor == -1) {
-                    // Color does not exist for this site, so let's extract it
-                    chosenColor = PrefUtil.getToolbarColor(ctx);
-                    Intent extractorService = new Intent(ctx, ColorExtractor.class);
-                    extractorService.setData(Uri.parse(url));
-                    ctx.startService(extractorService);
-                }
-            } else chosenColor = PrefUtil.getToolbarColor(ctx);
-
-            builder.setToolbarColor(chosenColor);
-        }
-
-        if (PrefUtil.isAnimationEnabled(ctx)) {
-            switch (PrefUtil.getAnimationPref(ctx)) {
-                case 1:
-                    builder.setStartAnimations(ctx, R.anim.slide_in_right, R.anim.slide_out_left)
-                            .setExitAnimations(ctx, R.anim.slide_in_left, R.anim.slide_out_right);
-                    break;
-                case 2:
-                    builder.setStartAnimations(ctx, R.anim.slide_up_right, R.anim.slide_down_left)
-                            .setExitAnimations(ctx, R.anim.slide_up_left, R.anim.slide_down_right);
-                    break;
-                default:
-                    builder.setStartAnimations(ctx, R.anim.slide_in_right, R.anim.slide_out_left)
-                            .setExitAnimations(ctx, R.anim.slide_in_left, R.anim.slide_out_right);
-            }
-
-        }
+        if (session != null) builder = new CustomTabsIntent.Builder(session);
+        else builder = new CustomTabsIntent.Builder();
 
         builder.setShowTitle(true);
-        addShareIntent(ctx, url, builder);
-
-        addCopyItem(ctx, url, builder);
-
-        addShortcuttoHomescreen(ctx, url, builder);
-
         addActionButtonSecondary(ctx, url, builder);
         return builder.build();
     }
@@ -90,7 +41,7 @@ public class CustomTabDelegate {
 
             PendingIntent openBrowser = PendingIntent
                     .getBroadcast(ctx, 0, activityIntent,
-                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setActionButton(
                     drawableToBitmap(ctx.getResources().getDrawable(R.drawable.ic_open_in_browser, ctx.getTheme())), "Secondary browser", openBrowser);
         }
@@ -109,36 +60,6 @@ public class CustomTabDelegate {
         }
         Timber.d("No existing sessions present");
         return null;
-    }
-
-    private static void addShortcuttoHomescreen(Context c, String url, CustomTabsIntent.Builder builder) {
-        if (url != null) {
-            Intent addShortcutIntent = new Intent(c, AddHomeShortcutReceiver.class);
-            PendingIntent addShortcut = PendingIntent
-                    .getBroadcast(c, 0, addShortcutIntent,
-                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
-
-            builder.addMenuItem(c.getString(R.string.add_to_homescreen), addShortcut);
-        }
-    }
-
-    private static void addCopyItem(Context c, String url, CustomTabsIntent.Builder builder) {
-        if (url != null) {
-            Intent clipboardIntent = new Intent(c, ClipboardService.class);
-            PendingIntent serviceIntent = PendingIntent.getService(c, 0, clipboardIntent,
-                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.addMenuItem(c.getString(R.string.copy_link), serviceIntent);
-        }
-    }
-
-    private static void addShareIntent(Context c, String url, CustomTabsIntent.Builder builder) {
-        if (url != null) {
-            Intent shareIntent = new Intent(c, ShareBroadcastReceiver.class);
-            PendingIntent pendingShareIntent = PendingIntent
-                    .getBroadcast(c, 0, shareIntent,
-                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.addMenuItem(c.getString(R.string.share), pendingShareIntent);
-        }
     }
 
     private static Bitmap drawableToBitmap(Drawable drawable) {

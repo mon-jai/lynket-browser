@@ -36,13 +36,9 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
      * @param activity         The host activity.
      * @param customTabsIntent a CustomTabsIntent to be used if Custom Tabs is available.
      * @param uri              the Uri to be opened.
-     * @param fallback         a CustomTabsFallback to be used if Custom Tabs is not available.
      */
     @SuppressWarnings("SameParameterValue")
-    public static void openCustomTab(Activity activity,
-                                     CustomTabsIntent customTabsIntent,
-                                     Uri uri,
-                                     CustomTabsFallback fallback) {
+    public static void openCustomTab(Activity activity, CustomTabsIntent customTabsIntent, Uri uri) {
         // The package name to use
         String packageName;
 
@@ -56,20 +52,19 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
             Timber.d("Valid user choice not present, defaulting to conventional method");
             packageName = MyCustomTabHelper.getPackageNameToUse(activity);
         }
+
         //If we cant find a package name, it means there's no browser that supports
         //Chrome Custom Tabs installed. So, we fallback to the webview
         if (packageName == null) {
-            Timber.d("Called fallback since no package found!");
-            callFallback(activity, uri, fallback);
-        } else {
-            customTabsIntent.intent.setPackage(packageName);
-            try {
-                customTabsIntent.launchUrl(activity, uri);
-                Timber.d("Launched url:" + uri.toString());
-            } catch (Exception e) {
-                callFallback(activity, uri, fallback);
-                Timber.d("Called fallback even though package was found, weird Exception :" + e.toString());
-            }
+            throw new Error("No package found!");
+        }
+
+        customTabsIntent.intent.setPackage(packageName);
+        try {
+            customTabsIntent.launchUrl(activity, uri);
+            Timber.d("Launched url:" + uri);
+        } catch (Exception e) {
+            Timber.d("Called fallback even though package was found, weird Exception :" + e);
         }
     }
 
