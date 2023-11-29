@@ -1,7 +1,7 @@
 package arun.com.chromer.extra;
 
 import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
-import de.psdev.licensesdialog.licenses.License;
+import de.psdev.licensesdialog.licenses.GnuGeneralPublicLicense30;
 import de.psdev.licensesdialog.licenses.MITLicense;
 import de.psdev.licensesdialog.model.Notice;
 import de.psdev.licensesdialog.model.Notices;
@@ -12,47 +12,41 @@ import de.psdev.licensesdialog.model.Notices;
 public class Licenses {
     public static Notices getNotices() {
         Notices notices = new Notices();
-        String name = "LicensesDialog";
-        String url = "http://psdev.de";
-        String copyright = "Copyright 2013 Philip Schiffer <admin@psdev.de>";
-        License license = new ApacheSoftwareLicense20();
-        Notice notice = new Notice(name, url, copyright, license);
-        notices.addNotice(notice);
 
-        name = "Material Dialogs";
-        url = "https://github.com/afollestad/material-dialogs";
-        copyright = "Copyright (c) 2015 Aidan Michael Follestad";
-        license = new MITLicense();
-        notice = new Notice(name, url, copyright, license);
-        notices.addNotice(notice);
+        notices.addNotice(new Notice(
+                "Lynket",
+                "https://github.com/arunkumar9t2/lynket-browser",
+                "Copyright (C) 2017 Arunkumar",
+                new GnuGeneralPublicLicense30()
+        ));
 
-        name = "Android Open Source Project";
-        url = "https://source.android.com/";
-        copyright = "Copyright (C) 2008 The Android Open Source Project";
-        license = new ApacheSoftwareLicense20();
-        notice = new Notice(name, url, copyright, license);
-        notices.addNotice(notice);
+        notices.addNotice(new Notice(
+                "LicensesDialog",
+                "http://psdev.de",
+                "Copyright 2013 Philip Schiffer <admin@psdev.de>",
+                new ApacheSoftwareLicense20()
+        ));
 
-        name = "Material Drawer";
-        url = "https://github.com/mikepenz/MaterialDrawer";
-        copyright = "Copyright Mike Penz";
-        license = new ApacheSoftwareLicense20();
-        notice = new Notice(name, url, copyright, license);
-        notices.addNotice(notice);
+        notices.addNotice(new Notice(
+                "Material Dialogs",
+                "https://github.com/afollestad/material-dialogs",
+                "Copyright (c) 2015 Aidan Michael Follestad",
+                new MITLicense()
+        ));
 
-        name = "AppIntro";
-        url = "https://github.com/PaoloRotolo/AppIntro";
-        copyright = "Copyright 2015 Paolo Rotolo";
-        license = new ApacheSoftwareLicense20();
-        notice = new Notice(name, url, copyright, license);
-        notices.addNotice(notice);
+        notices.addNotice(new Notice(
+                "Android Open Source Project",
+                "https://source.android.com/",
+                "Copyright (C) 2008 The Android Open Source Project",
+                new ApacheSoftwareLicense20()
+        ));
 
-        name = "Timber";
-        url = "https://github.com/JakeWharton/timber";
-        copyright = "Copyright 2013 Jake Wharton";
-        license = new ApacheSoftwareLicense20();
-        notice = new Notice(name, url, copyright, license);
-        notices.addNotice(notice);
+        notices.addNotice(new Notice(
+                "Timber",
+                "https://github.com/JakeWharton/timber",
+                "Copyright 2013 Jake Wharton",
+                new ApacheSoftwareLicense20()
+        ));
 
         return notices;
     }

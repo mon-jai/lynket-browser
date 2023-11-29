@@ -130,7 +130,6 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
         private void actOnCurrentNode(AccessibilityNodeInfo node) {
             if (node != null && node.getText() != null) {
                 String currNodeText = node.getText().toString();
-                // Timber.d("cuur " + currNodeText);
                 // Now attempt to get all the URLS in this string
                 extractURL(currNodeText);
                 if (urls != null && urls.size() != 0) {
@@ -167,7 +166,6 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
                     .matcher(string);
             while (m.find()) {
                 String url = m.group();
-                // Timber.d( "URL extracted: " + url);
                 if (!url.toLowerCase().matches("^\\w+://.*")) {
                     url = "http://" + url;
                 }

@@ -7,6 +7,8 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -29,10 +31,12 @@ import java.util.List;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
+import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
 import arun.com.chromer.util.PrefUtil;
 import arun.com.chromer.util.Util;
+import de.psdev.licensesdialog.LicensesDialog;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
@@ -162,6 +166,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         linkAccessiblityAndPrefetch();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_license) {
+            new LicensesDialog.Builder(this)
+                    .setNotices(Licenses.getNotices())
+                    .setTitle(R.string.licenses)
+                    .build()
+                    .show();
+
+            return true;
+        } else {
+            // The user's action isn't recognized.
+            // Invoke the superclass to handle it.
+            return super.onOptionsItemSelected(item);
+
+        }
     }
 
     private void populateUIBasedOnPreferences() {
